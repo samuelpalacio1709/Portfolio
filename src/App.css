@@ -6,9 +6,10 @@
   --gray-color: #5C5C5C;
   --gray-transparent: #5c5c5c7d;
   --green-color: #CDFBD2;
-  --light-color: rgb(244, 247, 244);
+  --light-color: #e9f3ea;
   --border-radius-first: 20px;
   --border-radius-second: 25px;
+  --border-radius-third: 10px;
   --p-font-size: 16px;
   --h2-font-size: 20px;
   --white-border: 5px solid var(--light-color);
@@ -18,6 +19,12 @@ h1,
 h2 {
   font-family: 'Outfit', sans-serif;
   font-family: 'Poppins', sans-serif;
+}
+
+a {
+  font-family: 'Outfit', sans-serif;
+  text-decoration: none;
+
 }
 
 h2 {
@@ -41,115 +48,4 @@ body {
   width: 100%;
   height: 15px;
   background-color: var(--green-color);
-}
-
-.card {
-  position: relative;
-  width: 450px;
-  height: 410px;
-  margin: 0 auto;
-  margin-top: 100px;
-  background-color: var(--gray-transparent);
-  border-radius: var(--border-radius-first);
-}
-
-.top-bar {
-  position: absolute;
-  width: 100%;
-  height: 18%;
-  background-color: var(--green-color);
-}
-
-.card-inside {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  border-radius: var(--border-radius-first);
-
-}
-
-.title {
-  position: absolute;
-  width: 45%;
-  height: 80px;
-  background-color: var(--green-color);
-  top: -20px;
-  border-top-left-radius: var(--border-radius-first);
-  border-top-right-radius: var(--border-radius-first);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 10px;
-}
-
-.tools {
-  position: absolute;
-  width: 55%;
-  height: 100%;
-  background-color: var(--gray-color);
-  right: 0;
-  border-bottom-left-radius: var(--border-radius-second);
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  flex-wrap: wrap;
-}
-
-.tool {
-  margin-left: 10px;
-  width: auto;
-  height: 20px;
-  border-radius: var(--border-radius-second);
-  background-color: var(--green-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 10px;
-  padding-right: 10px;
-
-}
-
-.tool:nth-child(4) {
-  margin-left: 30px;
-}
-
-.showcase {
-  position: absolute;
-  top: 80px;
-  width: 100%;
-  height: 60%;
-  display: flex;
-  align-items: center;
-}
-
-.align-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-}
-
-.project-video {
-  height: 80%;
-  width: 75%;
-}
-
-.project-links {
-  height: 50%;
-  width: 25%;
-}
-
-.button-img {
-  width: 90%;
-  height: 90%;
-  background-color: #5C5C5C;
-  border-radius: var(--border-radius-first);
-  overflow: hidden;
-  border: var(--white-border);
-  cursor: pointer;
-}
-
-.project-img {
-  height: 100%;
 }

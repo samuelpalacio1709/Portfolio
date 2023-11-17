@@ -1,3 +1,4 @@
+import '../Card.css';
 export function Card({ project }) {
   return (
     <div className="card">
@@ -10,15 +11,24 @@ export function Card({ project }) {
           </div>
         </div>
         <div className="showcase">
-          <div className="project-video align-center">
-            <div className="button-img">
-              <img className="project-img align-center" src={project.img} alt={project.title} />
+          <div className="showcase-video">
+            <div className="project-video align-center">
+              <div className="button-img">
+                <img className="project-img align-center" src={project.img} alt={project.title} />
+              </div>
+            </div>
+            <div className="project-links">
+              {project.links.map((link, index) => {
+                return <Link key={index} link={link} />;
+              })}
             </div>
           </div>
-          <div className="project-links"></div>
+          <div className="showcase-dsc">
+            <p>{project.description}</p>
+          </div>
         </div>
       </div>
-      <div className="title ">
+      <div className="title">
         <h2>{project.title}</h2>
       </div>
     </div>
@@ -29,6 +39,16 @@ export function Tool({ dsc }) {
   return (
     <div className="tool">
       <p>{dsc}</p>
+    </div>
+  );
+}
+
+export function Link({ link }) {
+  return (
+    <div className="link align-center">
+      <a target="new" href={link.href}>
+        <p>{link.name}</p>
+      </a>
     </div>
   );
 }
