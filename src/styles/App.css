@@ -1,5 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600&family=Poppins:wght@500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600&family=Poppins:wght@700&display=swap');
-@import url('https://fonts.cdnfonts.com/css/cabinet-grotesk');
 
 * {
   --dark-color: #06010c;
@@ -17,10 +17,27 @@
   --z-index-second: 4;
 }
 
+@font-face {
+  font-family: 'Darbee';
+  src: url('assets/fonts/Darbee.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 h1,
-h2 {
-  font-family: 'Outfit', sans-serif;
+h2,
+h3 {
   font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+  color: var(--light-color);
+  font-size: 55px;
+}
+
+h3 {
+  color: var(--green-color);
+  font-weight: normal;
 }
 
 a {
@@ -29,13 +46,19 @@ a {
 
 }
 
+body {
+  overflow: hidden;
+}
+
+
+
 h2 {
   font-size: var(--h2-font-size);
-  color: var(--gray-color);
+  color: var(--light-color);
 }
 
 p {
-  font-family: 'Cabinet Grotesk', sans-serif;
+  font-family: 'Darbee', sans-serif;
   font-size: var(--p-font-size);
   color: var(--gray-color);
 }
@@ -49,7 +72,6 @@ body {
   position: fixed;
   width: 100%;
   height: 15px;
-  background-color: var(--green-color);
   z-index: var(--z-index-first);
 
 }
@@ -74,7 +96,7 @@ body {
   height: auto;
 
   padding: 20px;
-  background-color: #CDFBD2;
+  background-color: var(--green-color);
   border-radius: var(--border-radius-first);
 }
 
@@ -82,4 +104,48 @@ iframe {
   width: 1000px;
   height: 563px;
   border-radius: var(--border-radius-first);
+}
+
+.options {
+  position: fixed;
+  width: 550px;
+  display: flex;
+  right: 150px;
+  top: 40px;
+  justify-content: space-between;
+}
+
+.option {
+  width: 130px;
+  padding: 4px;
+  text-align: center;
+  border-bottom-left-radius: var(--border-radius-first);
+  border-bottom-right-radius: var(--border-radius-first);
+  cursor: pointer;
+}
+
+.logo {
+  position: fixed;
+  top: 10px;
+  left: 130px;
+}
+
+.logo img {
+  width: 100px;
+}
+
+.section {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(251, 239, 205);
+}
+
+.section:nth-child(1) {
+
+  background-color: #000000;
+}
+
+.section:nth-child(2) {
+
+  background-color: #a13333;
 }

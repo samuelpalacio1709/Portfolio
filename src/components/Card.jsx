@@ -1,4 +1,4 @@
-import '../Card.css';
+import '../styles/Card.css';
 export function Card({ project }) {
   return (
     <div className="card">
