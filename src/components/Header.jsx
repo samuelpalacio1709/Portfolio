@@ -1,4 +1,4 @@
-export function Header() {
+export function Header({ currentSection, OnOptionChanged }) {
   return (
     <header className="header">
       <div className="logo">
@@ -7,17 +7,43 @@ export function Header() {
         </h3>
       </div>
       <div className="options">
-        <Option title={'Work'} />
-        <Option title={'About'} />
-        <Option title={"Let's talk"} />
+        <Option
+          title={'Home'}
+          selected={currentSection}
+          OnOptionChanged={OnOptionChanged}
+          option={0}
+        />
+        <Option
+          title={'Work'}
+          selected={currentSection}
+          OnOptionChanged={OnOptionChanged}
+          option={1}
+        />
+        <Option
+          title={'About'}
+          selected={currentSection}
+          OnOptionChanged={OnOptionChanged}
+          option={2}
+        />
+        <Option
+          title={"Let's talk"}
+          selected={currentSection}
+          OnOptionChanged={OnOptionChanged}
+          option={3}
+        />
       </div>
     </header>
   );
 }
 
-function Option({ title }) {
+function Option({ title, selected, OnOptionChanged, option }) {
   return (
-    <div className="option">
+    <div
+      onClick={() => {
+        OnOptionChanged(option);
+      }}
+      className={`option ${selected === option && 'option-selected'}`}
+    >
       <h3>{title}</h3>
     </div>
   );

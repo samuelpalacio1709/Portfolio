@@ -4,7 +4,7 @@ import { AnimateLeftToRigth } from '../utility';
 
 import Typed from 'typed.js';
 
-export function Home({ homeRef }) {
+export function Home({ sectionRef }) {
   const text = useRef(null);
   const headingRef = useRef(null);
 
@@ -34,13 +34,13 @@ export function Home({ homeRef }) {
     };
   }, []);
   return (
-    <section className="home section" ref={homeRef}>
+    <section className="home section" ref={sectionRef}>
       <div className="intro">
         <h1 ref={headingRef}>
           Hello there! <br />
           This is <span className="strong">Samuel</span>{' '}
         </h1>
-        <p>
+        <p className="intro-dsc">
           <span ref={text} />
         </p>
       </div>

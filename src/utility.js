@@ -18,14 +18,14 @@ export function AnimateLeftToRigth(element, duration, delay) {
 let currentAnimation = null;
 let currentSectionIndex = 0;
 
-export function AnimateNextSection(event, main, sections, checkMouse = true) {
+export function AnimateNextSection(event, main, sections, isAnimated = true, customSection = null) {
 
     const containerRect = main.getBoundingClientRect();
     const rectContents = sections.map((section) => {
         return section.getBoundingClientRect();
     });
 
-    if (!checkMouse) {
+    if (!isAnimated) {
         currentAnimation?.kill();
         currentAnimation = null;
         const scrollY = rectContents[currentSectionIndex].top - containerRect.top + main.scrollTop;
@@ -35,7 +35,7 @@ export function AnimateNextSection(event, main, sections, checkMouse = true) {
 
     if (currentAnimation != null) return currentSectionIndex;
 
-    if (checkMouse) {
+    if (isAnimated && event !== null) {
         if (event.deltaY > 0) {
             currentSectionIndex++;
             if (currentSectionIndex >= sections.length) {
@@ -49,10 +49,14 @@ export function AnimateNextSection(event, main, sections, checkMouse = true) {
             }
         }
     }
+    if (customSection !== null) {
+        currentSectionIndex = customSection;
+    }
+
     const scrollY = rectContents[currentSectionIndex].top - containerRect.top + main.scrollTop;
     if (scrollY == window.scrollY) return currentSectionIndex;
 
-    currentAnimation = gsap.to(window, 2, {
+    currentAnimation = gsap.to(window, 1.5, {
         scrollTo: {
             y: scrollY,
             autoKill: true

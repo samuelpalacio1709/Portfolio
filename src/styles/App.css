@@ -4,7 +4,7 @@
 * {
   --dark-color: #06010c;
   --gray-color: #5C5C5C;
-  --gray-transparent: #5c5c5c7d;
+  --gray-transparent: #5c5c5cdd;
   --green-color: #CDFBD2;
   --light-color: #e9f3ea;
   --border-radius-first: 20px;
@@ -15,6 +15,7 @@
   --white-border: 5px solid var(--light-color);
   --z-index-first: 10;
   --z-index-second: 4;
+  --z-index-third: 2;
 }
 
 @font-face {
@@ -23,6 +24,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 
 h1,
 h2,
@@ -94,7 +96,6 @@ body {
 .video-container {
   width: auto;
   height: auto;
-
   padding: 20px;
   background-color: var(--green-color);
   border-radius: var(--border-radius-first);
@@ -119,9 +120,27 @@ iframe {
   width: 130px;
   padding: 4px;
   text-align: center;
-  border-bottom-left-radius: var(--border-radius-first);
-  border-bottom-right-radius: var(--border-radius-first);
   cursor: pointer;
+  border-radius: var(--border-radius-first);
+  transition: all 0.5s;
+}
+
+.option:hover {
+  transition: all 0.5s;
+  background-color: var(--green-color);
+}
+
+.option:hover h3 {
+  color: var(--dark-color);
+}
+
+.option-selected {
+  background-color: var(--green-color);
+
+}
+
+.option-selected h3 {
+  color: var(--dark-color);
 }
 
 .logo {
@@ -137,15 +156,8 @@ iframe {
 .section {
   width: 100vw;
   height: 100vh;
-  background-color: rgb(251, 239, 205);
 }
 
-.section:nth-child(1) {
-
-  background-color: #000000;
-}
-
-.section:nth-child(2) {
-
-  background-color: #a13333;
+.title h2 {
+  color: var(--gray-color);
 }

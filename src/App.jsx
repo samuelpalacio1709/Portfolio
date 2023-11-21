@@ -4,42 +4,63 @@ import { Card } from './components/Card';
 import { info } from './information';
 import { VideoPlayer } from './components/VideoPlayer';
 import { Home } from './components/Home';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimateNextSection } from './utility';
+import { Experience } from './components/Experience';
+import { Work } from './components/Work';
 function App() {
+  const [section, setSection] = useState(0);
+
   const mainRef = useRef(null);
   const homeRef = useRef(null);
   const workRef = useRef(null);
   const aboutRef = useRef(null);
+  const contactRef = useRef(null);
+
   function showWheel(event) {
+    event.preventDefault();
     NextSection(event, true);
   }
   window.addEventListener('resize', (event) => {
     NextSection(event, false);
   });
 
-  function NextSection(event, isAnimated) {
+  function NextSection(event, isAnimated, customSection = null) {
     const nextSection = AnimateNextSection(
       event,
       mainRef.current,
-      [homeRef.current, workRef.current, aboutRef.current],
-      isAnimated
+      [homeRef.current, workRef.current],
+      isAnimated,
+      customSection
     );
-    console.log(nextSection);
+    setSection(nextSection);
   }
+
+  function OptionChanged(option) {
+    NextSection(null, true, option);
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 100);
+
+    const mainElement = mainRef.current;
+    mainElement.addEventListener('wheel', showWheel, { passive: false });
+    return () => {
+      mainElement.removeEventListener('wheel', showWheel);
+    };
+  }, []);
 
   return (
     <>
-      <Header />
-      <main ref={mainRef} onWheel={showWheel}>
-        <Home homeRef={homeRef} />
-        <Home homeRef={workRef} />
-        <Home homeRef={aboutRef} />
-      </main>
+      <Header currentSection={section} OnOptionChanged={OptionChanged} />
 
-      {/* {info.map((item, index) => {
-        return <Card key={index} project={item} />;
-      })} */}
+      <main ref={mainRef}>
+        <Experience />
+        <Home sectionRef={homeRef} />
+        <Work sectionRef={workRef} />
+      </main>
     </>
   );
 }

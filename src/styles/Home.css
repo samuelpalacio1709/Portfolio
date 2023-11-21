@@ -1,16 +1,16 @@
 .home {}
 
 .intro {
-    width: 50%;
+    width: 70%;
     height: 100%;
     min-width: 540px;
     display: flex;
     justify-content: center;
     align-content: center;
-    padding-left: 160px;
+    padding-left: 140px;
     flex-direction: column;
-
 }
+
 
 .strong {
     color: var(--green-color);
