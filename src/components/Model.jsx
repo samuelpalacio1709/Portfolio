@@ -33,10 +33,10 @@ export function Model({ section, customMaterial = null, modelSet, animate, point
 
   useFrame((state, delta) => {
     if (headRef.current) {
-      headRef.current.lookAt(pointLookingAt);
+      const head = headRef.current;
+      head.lookAt(pointLookingAt);
     }
     if (mixer.current) {
-      console.log(delta);
       mixer.current.update(delta);
     }
   });
@@ -58,7 +58,7 @@ export function Model({ section, customMaterial = null, modelSet, animate, point
     }
   }, [animate]);
 
-  return <>{model && <primitive object={model.scene} position={[2, -1, 0]} />}</>;
+  return <>{model && <primitive object={model.scene} position={[0, 0, 0]} />}</>;
 }
 function SetAnimationClips(mainClip, mixer) {
   const action1Clip = AnimationUtils.subclip(mainClip, 'All Animations', 0, 75, 24);

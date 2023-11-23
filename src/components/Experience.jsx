@@ -4,33 +4,34 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { CameraShake } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { Bloom, EffectComposer, Noise } from '@react-three/postprocessing';
 import { Model } from './Model';
 import { createOutlineMaterial } from '../materials';
+import { Stats } from '@react-three/drei';
+
 export function Experience({ section, OnSceneLoaded }) {
-  const [pos, setPos] = useState(new THREE.Vector3(-1.5, -5, 5));
+  const [pos, setPos] = useState(new THREE.Vector3(-50, -5, 1));
   const [pointer, setPointer] = useState(new THREE.Vector2(0, 0));
   useEffect(() => {
     let vector = pos;
     if (section == 0) {
       gsap.to(vector, {
         duration: 1.5,
-        x: -1.5,
-        y: 0.5,
-        z: 5,
+        x: -2.5,
+        y: 0.8,
+        z: 4,
         onUpdate: () => setPos(vector),
         ease: 'sine.out'
       });
     }
     if (section == 1) {
-      // gsap.to(vector, {
-      //   duration: 0.8,
-      //   z: 6,
-      //   x: 5,
-      //   y: -7,
-      //   onUpdate: () => setPos(vector),
-      //   ease: 'sine.inOut'
-      // });
+      gsap.to(vector, {
+        duration: 0.8,
+        z: 6,
+        x: 5,
+        y: -7,
+        onUpdate: () => setPos(vector),
+        ease: 'sine.inOut'
+      });
     }
   }, [section]);
 
@@ -48,10 +49,8 @@ export function Experience({ section, OnSceneLoaded }) {
         <directionalLight castShadow position={[0, 2, 0]}></directionalLight>
         <Scene section={section} OnSceneLoaded={OnSceneLoaded} />
         <Camera cameraPos={pos} />
-        <EffectComposer>
-          <Bloom luminanceThreshold={0.05} intensity={0.8} luminanceSmoothing={0.8} height={300} />
-          <Noise opacity={0.03} />
-        </EffectComposer>
+
+        <Stats />
       </Canvas>
     </section>
   );
@@ -86,6 +85,8 @@ function Scene({ section, OnSceneLoaded }) {
   const [animate, setAnimation] = useState(false);
   const { scene, camera, raycaster } = useThree();
   const [pointLookingAt, setPoint] = useState(new THREE.Vector3(0, 0, 0));
+  const [pointLookingAtLerp, setPointTarget] = useState(new THREE.Vector3(0, 0, 0));
+  const speed = 5;
   function setMainModel(model) {
     setMain(model);
   }
@@ -107,10 +108,15 @@ function Scene({ section, OnSceneLoaded }) {
       raycaster.setFromCamera(newMousePos, camera);
       const intersects = raycaster.intersectObjects(scene.children);
       if (intersects.length > 0) {
-        setPoint(new THREE.Vector3(intersects[0].point.x, intersects[0].point.y, 3));
+        setPointTarget(new THREE.Vector3(intersects[0].point.x, intersects[0].point.y, 1));
       }
     });
   }, []);
+
+  useFrame((state, delta) => {
+    const newVector = pointLookingAt;
+    setPoint(newVector.lerp(pointLookingAtLerp, delta * speed));
+  });
 
   return (
     <>
