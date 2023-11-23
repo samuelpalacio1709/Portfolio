@@ -1,24 +1,44 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../styles/Experience.css';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { CameraShake } from '@react-three/drei';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { AnimationUtils } from 'three';
 import gsap from 'gsap';
-
+import { Bloom, EffectComposer, Noise } from '@react-three/postprocessing';
+import { Model } from './Model';
+import { createOutlineMaterial } from '../materials';
 export function Experience({ section, OnSceneLoaded }) {
-  const [pos, setPos] = useState(new THREE.Vector3(-20, -5, 10));
-
+  const [pos, setPos] = useState(new THREE.Vector3(-1.5, -5, 5));
+  const [pointer, setPointer] = useState(new THREE.Vector2(0, 0));
   useEffect(() => {
     let vector = pos;
     if (section == 0) {
-      gsap.to(vector, { duration: 2, x: 0, y: 0.5, z: 5, onUpdate: () => setPos(vector) });
+      gsap.to(vector, {
+        duration: 1.5,
+        x: -1.5,
+        y: 0.5,
+        z: 5,
+        onUpdate: () => setPos(vector),
+        ease: 'sine.out'
+      });
     }
     if (section == 1) {
-      gsap.to(vector, { duration: 2, z: 10, onUpdate: () => setPos(vector) });
+      // gsap.to(vector, {
+      //   duration: 0.8,
+      //   z: 6,
+      //   x: 5,
+      //   y: -7,
+      //   onUpdate: () => setPos(vector),
+      //   ease: 'sine.inOut'
+      // });
     }
   }, [section]);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', (e) => {
+      setPointer(new THREE.Vector2(e.offsetX, e.offsetY));
+    });
+  }, []);
 
   return (
     <section className="experience">
@@ -28,6 +48,10 @@ export function Experience({ section, OnSceneLoaded }) {
         <directionalLight castShadow position={[0, 2, 0]}></directionalLight>
         <Scene section={section} OnSceneLoaded={OnSceneLoaded} />
         <Camera cameraPos={pos} />
+        <EffectComposer>
+          <Bloom luminanceThreshold={0.05} intensity={0.8} luminanceSmoothing={0.8} height={300} />
+          <Noise opacity={0.03} />
+        </EffectComposer>
       </Canvas>
     </section>
   );
@@ -57,173 +81,69 @@ function Camera({ cameraPos }) {
 }
 
 function Scene({ section, OnSceneLoaded }) {
-  const [model, set] = useState(null);
-  const [currentSection, setSection] = useState(0);
-
-  const mixer = useRef(null);
-
-  function LoadScene() {
-    if (model?.animations.length) {
-      mixer.current = new THREE.AnimationMixer(model.scene);
-      const mainClip = model?.animations[0];
-      console.log(mainClip);
-
-      SetAnimationClips(mainClip, mixer);
-    }
-    OnSceneLoaded();
+  const [mainModel, setMain] = useState(null);
+  const [outline, setOutlineModel] = useState(null);
+  const [animate, setAnimation] = useState(false);
+  const { scene, camera, raycaster } = useThree();
+  const [pointLookingAt, setPoint] = useState(new THREE.Vector3(0, 0, 0));
+  function setMainModel(model) {
+    setMain(model);
   }
 
+  function setOutLine(model) {
+    setOutlineModel(model);
+    StartAnimation();
+  }
+
+  function StartAnimation() {
+    setAnimation(true);
+    OnSceneLoaded();
+  }
   useEffect(() => {
-    new GLTFLoader().load(
-      '/assets/models/ovni.gltf',
-      (gltf) => {
-        loadMaterials(gltf.scene);
-        set(gltf);
-      },
-      (e) => {
-        console.log('Ready');
+    document.addEventListener('mousemove', (event) => {
+      const newMousePos = new THREE.Vector2(0, 0);
+      newMousePos.x = (event.clientX / window.innerWidth) * 2 - 1;
+      newMousePos.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(newMousePos, camera);
+      const intersects = raycaster.intersectObjects(scene.children);
+      if (intersects.length > 0) {
+        setPoint(new THREE.Vector3(intersects[0].point.x, intersects[0].point.y, 3));
       }
-    );
-  }, []);
-
-  useFrame((state, delta) => {
-    mixer.current?.update(delta);
-  });
-  useEffect(() => {
-    if (mixer.current) {
-      setPhase(mixer.current, section, currentSection);
-      setSection(section);
-    }
-  }, [section, mixer]);
-
-  return (
-    <>
-      {model && <primitive object={model.scene} position={[2, -1, 0]} />}
-      {model && <Solidify section={section} onLoadScene={LoadScene}></Solidify>}
-    </>
-  );
-}
-
-function Solidify({ onLoadScene, section }) {
-  const [currentSection, setSection] = useState(0);
-  const thickness = 0.01;
-  const materialCustom = new THREE.ShaderMaterial({
-    vertexShader: /* glsl */ `
-      void main() {
-        vec3 newPosition= position + normal * ${thickness};
-        gl_Position = projectionMatrix * modelViewMatrix *vec4(newPosition,1);
-      }
-    `,
-    fragmentShader: /* glsl */ `
-      void main() {
-        gl_FragColor = vec4(1,1,1,1);
-      }
-    `,
-    side: THREE.BackSide
-  });
-  const [model, set] = useState(null);
-  const mixer = useRef(null);
-  useEffect(() => {
-    new GLTFLoader().load('/assets/models/ovni.gltf', (gltf) => {
-      set(gltf.scene);
-      onLoadScene();
-      if (gltf.animations.length) {
-        const model = gltf;
-        mixer.current = new THREE.AnimationMixer(model.scene);
-        const mainClip = model?.animations[0];
-        console.log(mainClip);
-
-        SetAnimationClips(mainClip, mixer);
-      }
-
-      gltf.scene.traverse((child) => {
-        if (child.isMesh) {
-          child.material = materialCustom;
-        }
-      });
     });
   }, []);
 
-  useFrame((state, delta) => {
-    mixer.current?.update(delta);
-  });
-  useEffect(() => {
-    setPhase(mixer.current, section, currentSection);
-    setSection(section);
-  }, [section]);
-
-  return <>{model && <primitive object={model} position={[2, -1, 0]} />}</>;
-}
-
-function SetAnimationClips(mainClip, mixer) {
-  const action1Clip = AnimationUtils.subclip(mainClip, 'All Animations', 0, 75, 24);
-  const action2Clip = AnimationUtils.subclip(mainClip, 'All Animations', 75, 90, 24);
-  const action3Clip = AnimationUtils.subclip(mainClip, 'All Animations', 90, 120, 24);
-
-  const action1 = mixer.current.clipAction(action1Clip);
-  const action2 = mixer.current.clipAction(action2Clip);
-  const action3 = mixer.current.clipAction(action3Clip);
-
-  action1.setLoop(THREE.LoopOnce);
-  action1.clampWhenFinished = true;
-  action1.play();
-  action2.setLoop(THREE.LoopOnce);
-  action2.clampWhenFinished = true;
-  action3.setLoop(THREE.LoopOnce);
-  action3.clampWhenFinished = true;
-}
-
-function loadMaterials(model) {
-  let materialBase = null;
-  let materialCrystal = null;
-  let materialPanel = null;
-
-  model.traverse((child) => {
-    if (child.isMesh) {
-      if (child.material.name == 'BodyM') {
-        if (materialBase == null) {
-          materialBase = new THREE.MeshToonMaterial({
-            map: child.material.map,
-            emissiveMap: child.material.emissiveMap,
-            emissive: new THREE.Color('yellow'),
-            transparent: true
-          });
-        }
-        child.material = materialBase;
-      }
-      if (child.material.name == 'GlassMA') {
-        if (materialCrystal == null) {
-          child.renderOrder = -1000;
-
-          materialCrystal = new THREE.MeshToonMaterial({
-            map: child.material.map,
-            emissiveMap: child.material.emissiveMap,
-            emissive: new THREE.Color('white'),
+  return (
+    <>
+      <mesh
+        rotation={[0, 0, 0]}
+        scale={[100, 100, 1]}
+        position={[0, 0, 0]}
+        material={
+          new THREE.MeshBasicMaterial({
             transparent: true,
-            opacity: 0
-          });
+            opacity: 0,
+            depthTest: false,
+            depthWrite: false
+          })
         }
-        child.material = materialCrystal;
-      }
-      if (child.material.name == 'PanelM') {
-        if (materialPanel == null) {
-          materialPanel = new THREE.MeshToonMaterial({
-            map: child.material.map
-          });
-        }
-        child.material = materialPanel;
-      }
-    }
-  });
-}
-
-function setPhase(mixer, phase, beforePhase) {
-  if (mixer) {
-    if (phase == beforePhase) return;
-    mixer._actions[phase]
-      .reset()
-      .setEffectiveWeight(1)
-      .crossFadeFrom(mixer._actions[beforePhase], 1)
-      .play();
-  }
+      >
+        <planeGeometry></planeGeometry>
+      </mesh>
+      <Model
+        section={section}
+        modelSet={setMainModel}
+        animate={animate}
+        pointLookingAt={pointLookingAt}
+      ></Model>
+      {mainModel && (
+        <Model
+          section={section}
+          customMaterial={createOutlineMaterial()}
+          modelSet={setOutLine}
+          animate={animate}
+          pointLookingAt={pointLookingAt}
+        ></Model>
+      )}
+    </>
+  );
 }
