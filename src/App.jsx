@@ -4,18 +4,19 @@ import { Card } from './components/Card';
 import { info } from './information';
 import { VideoPlayer } from './components/VideoPlayer';
 import { Home } from './components/Home';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { AnimateNextSection } from './utility';
 import { Experience } from './components/Experience';
 import { Work } from './components/Work';
+import { Loading } from './components/Loading.JSX';
 function App() {
   const [section, setSection] = useState(0);
-
   const mainRef = useRef(null);
   const homeRef = useRef(null);
   const workRef = useRef(null);
   const aboutRef = useRef(null);
   const contactRef = useRef(null);
+  const [sceneLoaded, setLoadScene] = useState(false);
 
   function showWheel(event) {
     event.preventDefault();
@@ -29,7 +30,7 @@ function App() {
     const nextSection = AnimateNextSection(
       event,
       mainRef.current,
-      [homeRef.current, workRef.current],
+      [homeRef.current, workRef.current, aboutRef.current],
       isAnimated,
       customSection
     );
@@ -38,6 +39,9 @@ function App() {
 
   function OptionChanged(option) {
     NextSection(null, true, option);
+  }
+  function SceneLoaded() {
+    setLoadScene(true);
   }
 
   useEffect(() => {
@@ -54,13 +58,20 @@ function App() {
 
   return (
     <>
-      <Header currentSection={section} OnOptionChanged={OptionChanged} />
-
-      <main ref={mainRef}>
-        <Experience />
-        <Home sectionRef={homeRef} />
-        <Work sectionRef={workRef} />
-      </main>
+      {!sceneLoaded && <Loading></Loading>}
+      <>
+        <Header currentSection={section} OnOptionChanged={OptionChanged} />
+        <main ref={mainRef}>
+          <Experience section={section} OnSceneLoaded={SceneLoaded} />
+          {sceneLoaded && (
+            <>
+              <Home sectionRef={homeRef} />
+              <Work sectionRef={workRef} />
+              <Work sectionRef={aboutRef} />
+            </>
+          )}
+        </main>{' '}
+      </>
     </>
   );
 }
