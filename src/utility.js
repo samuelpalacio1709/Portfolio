@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/all";
-
+import * as THREE from "three"
 gsap.registerPlugin(ScrollToPlugin);
 
 //Animate text from lefto to rigth!
@@ -69,3 +69,25 @@ export function AnimateNextSection(event, main, sections, isAnimated = true, cus
     return currentSectionIndex;
 }
 
+export function lookAt(objectToRotate, targetPosition, delta, lockRotation) {
+    targetPosition = new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z);
+    let direction = new THREE.Vector3();
+    direction = targetPosition.sub(objectToRotate.position).normalize();
+
+    const quaternion = new THREE.Quaternion();
+    quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), direction);
+
+    const quatA = objectToRotate.quaternion.clone();
+    const quatB = quaternion;
+
+    const resultQuaternion = new THREE.Quaternion();
+    resultQuaternion.copy(quatA);
+    resultQuaternion.slerp(quatB, delta * 7);
+    const euler = new THREE.Euler().setFromQuaternion(resultQuaternion, "YXZ");
+    if (lockRotation) {
+        euler.x = 0;
+        euler.z = 0;
+    }
+
+    return new THREE.Quaternion().setFromEuler(euler);
+}

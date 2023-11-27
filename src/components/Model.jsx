@@ -3,20 +3,24 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { AnimationUtils } from 'three';
-
+import { lookAt } from '../utility';
+import { lerp } from 'three/src/math/MathUtils';
 export function Model({ section, customMaterial = null, modelSet, animate, pointLookingAt }) {
   const [currentSection, setSection] = useState(0);
   const [model, set] = useState(null);
   const mixer = useRef(null);
   const headRef = useRef(null);
-
+  const speedToRotate = 2;
   useEffect(() => {
     new GLTFLoader().load('/assets/models/ovni.gltf', (gltf) => {
       if (customMaterial == null) {
         loadMaterials(gltf.scene);
       }
       gltf.scene.traverse((child) => {
+        child.frustumCulled = false;
+
         if (child.name === 'Head') {
+          child.userData.x = 0;
           headRef.current = child;
         }
         if (customMaterial != null) {
@@ -25,20 +29,22 @@ export function Model({ section, customMaterial = null, modelSet, animate, point
           }
         }
       });
-
       set(gltf);
       modelSet(gltf);
     });
   }, []);
 
   useFrame((state, delta) => {
-    if (headRef.current) {
-      const head = headRef.current;
-      head.lookAt(pointLookingAt);
-    }
-    if (mixer.current) {
-      mixer.current.update(delta);
-    }
+    if (!headRef.current) return;
+    if (!animate) return;
+    if (!headRef.current) return;
+    const head = headRef.current;
+
+    head.userData.x = lerp(head.userData.x, pointLookingAt.x, delta * speedToRotate);
+    const localVector = new THREE.Vector3(0, 0, 0);
+    head.localToWorld(localVector);
+    head.lookAt(new THREE.Vector3(head.userData.x, localVector.y, pointLookingAt.z));
+    mixer.current.update(delta);
   });
   useEffect(() => {
     if (mixer.current) {

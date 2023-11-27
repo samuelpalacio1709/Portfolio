@@ -26,7 +26,7 @@ export function Experience({ section, OnSceneLoaded }) {
     if (section == 1) {
       gsap.to(vector, {
         duration: 0.8,
-        z: 6,
+        z: 7,
         x: 5,
         y: -7,
         onUpdate: () => setPos(vector),
@@ -36,6 +36,7 @@ export function Experience({ section, OnSceneLoaded }) {
   }, [section]);
 
   useEffect(() => {
+    console.log;
     window.addEventListener('mousemove', (e) => {
       setPointer(new THREE.Vector2(e.offsetX, e.offsetY));
     });
@@ -65,6 +66,7 @@ function Camera({ cameraPos }) {
       vec.set(pointer.x / 2 + cameraPos.x, pointer.y / 2 + cameraPos.y, cameraPos.z),
       0.05
     );
+    camera.updateMatrixWorld();
   });
 
   return (
@@ -85,8 +87,6 @@ function Scene({ section, OnSceneLoaded }) {
   const [animate, setAnimation] = useState(false);
   const { scene, camera, raycaster } = useThree();
   const [pointLookingAt, setPoint] = useState(new THREE.Vector3(0, 0, 0));
-  const [pointLookingAtLerp, setPointTarget] = useState(new THREE.Vector3(0, 0, 0));
-  const speed = 5;
   function setMainModel(model) {
     setMain(model);
   }
@@ -108,15 +108,12 @@ function Scene({ section, OnSceneLoaded }) {
       raycaster.setFromCamera(newMousePos, camera);
       const intersects = raycaster.intersectObjects(scene.children);
       if (intersects.length > 0) {
-        setPointTarget(new THREE.Vector3(intersects[0].point.x, intersects[0].point.y, 1));
+        setPoint(new THREE.Vector3(intersects[0].point.x, intersects[0].point.y, 1));
       }
     });
   }, []);
 
-  useFrame((state, delta) => {
-    const newVector = pointLookingAt;
-    setPoint(newVector.lerp(pointLookingAtLerp, delta * speed));
-  });
+  useFrame((state, delta) => {});
 
   return (
     <>
