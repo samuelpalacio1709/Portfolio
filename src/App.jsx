@@ -17,6 +17,7 @@ function App() {
   const aboutRef = useRef(null);
   const contactRef = useRef(null);
   const [sceneLoaded, setLoadScene] = useState(false);
+  const [srcVideo, setVideo] = useState('');
 
   function showWheel(event) {
     event.preventDefault();
@@ -30,7 +31,7 @@ function App() {
     const nextSection = AnimateNextSection(
       event,
       mainRef.current,
-      [homeRef.current, workRef.current, aboutRef.current],
+      [homeRef.current, workRef.current],
       isAnimated,
       customSection
     );
@@ -42,6 +43,9 @@ function App() {
   }
   function SceneLoaded() {
     setLoadScene(true);
+  }
+  function ShowVideo(url) {
+    setVideo(url);
   }
 
   useEffect(() => {
@@ -59,18 +63,19 @@ function App() {
   return (
     <>
       {!sceneLoaded && <Loading></Loading>}
+
       <>
         <Header currentSection={section} OnOptionChanged={OptionChanged} />
+        <VideoPlayer src={srcVideo} OnVideoShown={ShowVideo} />
         <main ref={mainRef}>
           <Experience section={section} OnSceneLoaded={SceneLoaded} />
           {sceneLoaded && (
             <>
               <Home sectionRef={homeRef} />
-              <Work sectionRef={workRef} />
-              <Work sectionRef={aboutRef} />
+              <Work sectionRef={workRef} OnVideoShown={ShowVideo} />
             </>
           )}
-        </main>{' '}
+        </main>
       </>
     </>
   );

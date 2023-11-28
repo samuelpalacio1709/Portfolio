@@ -10,7 +10,8 @@ export const info = [
         href: 'https://play.google.com/store/apps/details?id=com.GreenTomato.FroggoJump'
       },
       { name: 'Code', href: 'https://github.com/samuelpalacio1709/CodeExample_FroggoJump-' }
-    ]
+    ],
+    videoLink: 'https://www.youtube.com/embed/ZiqQ_eK0oqE'
   },
   {
     title: 'Talkie Camp',
@@ -23,7 +24,8 @@ export const info = [
         href: 'https://play.google.com/store/apps/details?id=com.GreenTomato.FroggoJump'
       },
       { name: 'Code', href: 'https://github.com/samuelpalacio1709/CodeExample_FroggoJump-' }
-    ]
+    ],
+    videoLink: 'https://www.youtube.com/embed/hffULUaBp5Y'
   },
   {
     title: 'Talkie Camp',
@@ -36,6 +38,8 @@ export const info = [
         href: 'https://play.google.com/store/apps/details?id=com.GreenTomato.FroggoJump'
       },
       { name: 'Code', href: 'https://github.com/samuelpalacio1709/CodeExample_FroggoJump-' }
-    ]
+    ],
+    videoLink: 'https://www.youtube.com/embed/hffULUaBp5Y'
+
   }
 ];

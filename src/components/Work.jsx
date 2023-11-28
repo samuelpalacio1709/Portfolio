@@ -1,7 +1,7 @@
 import '../styles/Work.css';
 import { info } from '../information';
 import { Card } from './Card';
-export function Work({ sectionRef }) {
+export function Work({ sectionRef, OnVideoShown }) {
   return (
     <section className="work section" ref={sectionRef}>
       <div className="showcase-work">
@@ -12,7 +12,7 @@ export function Work({ sectionRef }) {
         </div>
         <div className="cards-content">
           {info.map((item, index) => {
-            return <Card key={index} project={item} />;
+            return <Card key={index} project={item} OnVideoShown={OnVideoShown} />;
           })}
         </div>
         <div className="control">

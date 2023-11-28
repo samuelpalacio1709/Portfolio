@@ -1,5 +1,5 @@
 import '../styles/Card.css';
-export function Card({ project }) {
+export function Card({ project, OnVideoShown }) {
   return (
     <div className="card">
       <div className="card-inside">
@@ -13,8 +13,16 @@ export function Card({ project }) {
         <div className="showcase">
           <div className="showcase-video">
             <div className="project-video align-center">
-              <div className="button-img">
+              <div
+                className="button-img"
+                onClick={() => {
+                  OnVideoShown(project.videoLink);
+                }}
+              >
                 <img className="project-img align-center" src={project.img} alt={project.title} />
+              </div>
+              <div className="expand-video">
+                <h5>Click to watch video</h5>
               </div>
             </div>
             <div className="project-links">

@@ -7,6 +7,8 @@
   --gray-transparent: #5c5c5cdd;
   --green-color: #CDFBD2;
   --light-color: #e9f3ea;
+  --warning-color: #CDFBD2;
+
   --border-radius-first: 20px;
   --border-radius-second: 25px;
   --border-radius-third: 10px;
@@ -28,7 +30,8 @@
 
 h1,
 h2,
-h3 {
+h3,
+h5 {
   font-family: 'Poppins', sans-serif;
 }
 
@@ -40,6 +43,12 @@ h1 {
 h3 {
   color: var(--green-color);
   font-weight: normal;
+}
+
+h5 {
+  color: var(--gray-color);
+  font-size: 13px;
+
 }
 
 a {
@@ -79,11 +88,13 @@ body {
 }
 
 .video-player {
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
-  z-index: var(--z-index-second);
+  z-index: var(--z-index-first);
   overflow: hidden;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
 }
 
 .align-center {
@@ -99,6 +110,7 @@ body {
   padding: 20px;
   background-color: var(--green-color);
   border-radius: var(--border-radius-first);
+  position: relative;
 }
 
 iframe {
@@ -172,4 +184,18 @@ iframe {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.close-button {
+  width: 80px;
+  height: 30px;
+  background-color: var(--warning-color);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-second);
+  right: 0;
+  top: -40px;
+  cursor: pointer;
 }

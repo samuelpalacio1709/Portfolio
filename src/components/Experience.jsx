@@ -16,9 +16,9 @@ export function Experience({ section, OnSceneLoaded }) {
     if (section == 0) {
       gsap.to(vector, {
         duration: 1.5,
-        x: -2.5,
+        x: -2.4,
         y: 0.8,
-        z: 4,
+        z: 3.7,
         onUpdate: () => setPos(vector),
         ease: 'sine.out'
       });
@@ -26,9 +26,9 @@ export function Experience({ section, OnSceneLoaded }) {
     if (section == 1) {
       gsap.to(vector, {
         duration: 0.8,
-        z: 7,
+        z: 6,
         x: 5,
-        y: -7,
+        y: -8,
         onUpdate: () => setPos(vector),
         ease: 'sine.inOut'
       });
@@ -86,7 +86,7 @@ function Scene({ section, OnSceneLoaded }) {
   const [outline, setOutlineModel] = useState(null);
   const [animate, setAnimation] = useState(false);
   const { scene, camera, raycaster } = useThree();
-  const [pointLookingAt, setPoint] = useState(new THREE.Vector3(0, 0, 0));
+  const [pointLookingAt, setPoint] = useState(new THREE.Vector3(-2, 2, 2));
   function setMainModel(model) {
     setMain(model);
   }

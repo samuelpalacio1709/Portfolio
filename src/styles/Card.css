@@ -92,6 +92,7 @@
 .project-video {
     height: 80%;
     width: 75%;
+    position: relative;
 }
 
 .project-links {
@@ -110,11 +111,22 @@
     overflow: hidden;
     border: var(--white-border);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 
 .project-img {
     width: 100%;
+    transition: all 0.4s;
 }
+
+.project-img:hover {
+    width: 110%;
+}
+
+
 
 .link {
     width: 80%;
@@ -131,4 +143,14 @@
 .showcase-dsc p {
     color: var(--light-color);
     font-size: 22px;
+}
+
+.expand-video {
+    bottom: 10px;
+    position: absolute;
+    background-color: var(--light-color);
+    padding: 5px;
+    border-top-right-radius: var(--border-radius-third);
+    border-top-left-radius: var(--border-radius-third);
+    pointer-events: no;
 }
