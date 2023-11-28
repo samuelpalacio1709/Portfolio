@@ -27,8 +27,8 @@ export function Experience({ section, OnSceneLoaded }) {
       gsap.to(vector, {
         duration: 0.8,
         z: 6,
-        x: 5,
-        y: -8,
+        x: 2,
+        y: -7,
         onUpdate: () => setPos(vector),
         ease: 'sine.inOut'
       });

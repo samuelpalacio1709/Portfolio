@@ -3,10 +3,9 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { AnimationUtils } from 'three';
-import { lookAt } from '../utility';
 import gsap from 'gsap';
-import { lerp } from 'three/src/math/MathUtils';
-import { createTransparentMaterial, createOutlineMaterialFront } from '../materials';
+import { clamp, lerp } from 'three/src/math/MathUtils';
+import { createTransparentMaterial } from '../materials';
 
 export function Model({ section, customMaterial = null, modelSet, animate, pointLookingAt }) {
   const [currentSection, setSection] = useState(0);
@@ -96,11 +95,11 @@ export function Model({ section, customMaterial = null, modelSet, animate, point
 
     //Head rotation
     const head = headRef.current;
-    head.userData.x = lerp(head.userData.x, pointLookingAt.x, delta * speedToRotate * 1.5);
+    head.userData.x = lerp(head.userData.x, pointLookingAt.x, delta * speedToRotate * 2.5);
     head.userData.y = lerp(head.userData.y, pointLookingAt.y, delta * speedToRotate * 2);
     const localVectorHead = new THREE.Vector3(0, 0, 0);
     head.localToWorld(localVectorHead);
-    head.lookAt(new THREE.Vector3(head.userData.x, head.userData.y, pointLookingAt.z + 1));
+    head.lookAt(new THREE.Vector3(head.userData.x, head.userData.y, pointLookingAt.z + 3));
 
     //Spaceship rotation
     const spaceship = spaceShipCenterRef.current;
