@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600&family=Poppins:wght@500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600&family=Poppins:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cabin&display=swap');
 
 * {
   --dark-color: #06010c;
@@ -18,13 +19,6 @@
   --z-index-first: 10;
   --z-index-second: 4;
   --z-index-third: 2;
-}
-
-@font-face {
-  font-family: 'Darbee';
-  src: url('assets/fonts/Darbee.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
 }
 
 
@@ -69,7 +63,7 @@ h2 {
 }
 
 p {
-  font-family: 'Darbee', sans-serif;
+  font-family: 'Cabin', sans-serif;
   font-size: var(--p-font-size);
   color: var(--gray-color);
 }
