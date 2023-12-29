@@ -10,9 +10,12 @@ import { Stats } from '@react-three/drei';
 
 export function Experience({ section, OnSceneLoaded }) {
   const [pos, setPos] = useState(new THREE.Vector3(-50, -5, 1));
+  const [moving, setMoving] = useState(false);
   const [pointer, setPointer] = useState(new THREE.Vector2(0, 0));
   useEffect(() => {
     let vector = pos;
+    setMoving(true);
+
     if (section == 0) {
       gsap.to(vector, {
         duration: 1.5,
@@ -20,6 +23,9 @@ export function Experience({ section, OnSceneLoaded }) {
         y: 0.8,
         z: 3.7,
         onUpdate: () => setPos(vector),
+        onComplete: () => {
+          setMoving(false);
+        },
         ease: 'sine.out'
       });
     }
@@ -30,17 +36,13 @@ export function Experience({ section, OnSceneLoaded }) {
         x: 2,
         y: -7,
         onUpdate: () => setPos(vector),
+        onComplete: () => {
+          setMoving(false);
+        },
         ease: 'sine.inOut'
       });
     }
   }, [section]);
-
-  useEffect(() => {
-    console.log;
-    window.addEventListener('mousemove', (e) => {
-      setPointer(new THREE.Vector2(e.offsetX, e.offsetY));
-    });
-  }, []);
 
   return (
     <section className="experience">
@@ -48,7 +50,7 @@ export function Experience({ section, OnSceneLoaded }) {
         <ambientLight intensity={1} />
         <pointLight intensity={2} position={[2, 2, 0]}></pointLight>
         <directionalLight castShadow position={[0, 2, 0]}></directionalLight>
-        <Scene section={section} OnSceneLoaded={OnSceneLoaded} />
+        <Scene section={section} OnSceneLoaded={OnSceneLoaded} moving={moving} />
         <Camera cameraPos={pos} />
 
         <Stats />
@@ -81,7 +83,7 @@ function Camera({ cameraPos }) {
   );
 }
 
-function Scene({ section, OnSceneLoaded }) {
+function Scene({ section, OnSceneLoaded, moving }) {
   const [mainModel, setMain] = useState(null);
   const [outline, setOutlineModel] = useState(null);
   const [animate, setAnimation] = useState(false);
@@ -113,7 +115,9 @@ function Scene({ section, OnSceneLoaded }) {
     });
   }, []);
 
-  useFrame((state, delta) => {});
+  useEffect(() => {
+    setPoint(null);
+  }, [section]);
 
   return (
     <>
@@ -137,6 +141,7 @@ function Scene({ section, OnSceneLoaded }) {
         modelSet={setMainModel}
         animate={animate}
         pointLookingAt={pointLookingAt}
+        moving={moving}
       ></Model>
       {mainModel && (
         <Model
@@ -145,6 +150,7 @@ function Scene({ section, OnSceneLoaded }) {
           modelSet={setOutLine}
           animate={animate}
           pointLookingAt={pointLookingAt}
+          moving={moving}
         ></Model>
       )}
     </>

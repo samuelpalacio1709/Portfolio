@@ -7,7 +7,14 @@ import gsap from 'gsap';
 import { clamp, lerp } from 'three/src/math/MathUtils';
 import { createTransparentMaterial } from '../materials';
 
-export function Model({ section, customMaterial = null, modelSet, animate, pointLookingAt }) {
+export function Model({
+  section,
+  customMaterial = null,
+  modelSet,
+  animate,
+  pointLookingAt,
+  moving
+}) {
   const [currentSection, setSection] = useState(0);
   const { camera } = useThree();
   const [model, set] = useState(null);
@@ -49,11 +56,13 @@ export function Model({ section, customMaterial = null, modelSet, animate, point
         }
         if (child.name === 'Center') {
           child.userData.x = 0;
+          child.userData.z = 0;
           spaceShipCenterRef.current = child;
         }
         if (child.name === 'Head') {
           child.userData.x = 0;
           child.userData.y = 0;
+          child.userData.z = 0;
           headRef.current = child;
         }
         if (child.name === 'Outline') {
@@ -93,20 +102,49 @@ export function Model({ section, customMaterial = null, modelSet, animate, point
     const outline = outlineRef.current;
     outline.lookAt(camera.position);
 
-    //Head rotation
+    //Head and body rotation
     const head = headRef.current;
-    head.userData.x = lerp(head.userData.x, pointLookingAt.x, delta * speedToRotate * 2.5);
-    head.userData.y = lerp(head.userData.y, pointLookingAt.y, delta * speedToRotate * 2);
+    const spaceship = spaceShipCenterRef.current;
+
+    let offset = 0;
+    let offsetZ = 2;
+    if (section == 0) {
+      offset = -2;
+    } else if (section == 1) {
+      offset = 6;
+      offsetZ = 6;
+    }
+
+    head.userData.z = lerp(head.userData.z, offsetZ, delta * speedToRotate * 2);
+    spaceship.userData.z = lerp(spaceship.userData.z, offsetZ, delta * speedToRotate * 2);
+
+    if (pointLookingAt && !moving) {
+      head.userData.x = lerp(head.userData.x, pointLookingAt.x, delta * speedToRotate * 2.5);
+      head.userData.y = lerp(head.userData.y, pointLookingAt.y, delta * speedToRotate * 2);
+      spaceship.userData.x = lerp(spaceship.userData.x, pointLookingAt.x, delta * speedToRotate);
+    } else {
+      let headWorldPos = new THREE.Vector3(0, 0, 0);
+      let spaceshipWorldPos = new THREE.Vector3(0, 0, 0);
+      headWorldPos = head.getWorldPosition(headWorldPos);
+      spaceshipWorldPos = spaceship.getWorldPosition(spaceshipWorldPos);
+
+      head.userData.x = lerp(head.userData.x, headWorldPos.x + offset, delta * speedToRotate);
+      head.userData.y = lerp(head.userData.y, headWorldPos.y, delta * speedToRotate);
+      spaceship.userData.x = lerp(
+        spaceship.userData.x,
+        spaceshipWorldPos.x + offset,
+        delta * speedToRotate
+      );
+    }
+    //Head rotation
     const localVectorHead = new THREE.Vector3(0, 0, 0);
     head.localToWorld(localVectorHead);
-    head.lookAt(new THREE.Vector3(head.userData.x, head.userData.y, pointLookingAt.z + 3));
+    head.lookAt(new THREE.Vector3(head.userData.x, head.userData.y, head.userData.z));
 
     //Spaceship rotation
-    const spaceship = spaceShipCenterRef.current;
-    spaceship.userData.x = lerp(spaceship.userData.x, pointLookingAt.x, delta * speedToRotate);
     const localVector = new THREE.Vector3(0, 0, 0);
     spaceship.localToWorld(localVector);
-    spaceship.lookAt(new THREE.Vector3(spaceship.userData.x, localVector.y, pointLookingAt.z));
+    spaceship.lookAt(new THREE.Vector3(spaceship.userData.x, localVector.y, head.userData.z));
 
     //Animation mixer update
     mixer.current.update(delta);
@@ -133,7 +171,7 @@ export function Model({ section, customMaterial = null, modelSet, animate, point
 }
 function SetAnimationClips(mainClip, mixer) {
   const action1Clip = AnimationUtils.subclip(mainClip, 'All Animations', 0, 75, 24);
-  const action2Clip = AnimationUtils.subclip(mainClip, 'All Animations', 75, 108, 24);
+  const action2Clip = AnimationUtils.subclip(mainClip, 'All Animations', 75, 93, 24);
 
   const action1 = mixer.current.clipAction(action1Clip);
   const action2 = mixer.current.clipAction(action2Clip);

@@ -19,7 +19,7 @@ export function Home({ sectionRef }) {
         'I am a Software Developer who loves creating <strong>web pages.<strong>',
         'I am a Software Developer who loves creating <strong>WebGL experiences.<strong>',
         'I am a Software Developer who loves creating <strong>VR and AR apps.<strong> ',
-        'I am a Software Developer who loves creating <strong>3D Models.<strong> '
+        'I am a Software Developer who loves creating <strong>3D experiences.<strong> '
       ],
       typeSpeed: 25,
       smartBackspace: true,

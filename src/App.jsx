@@ -31,7 +31,7 @@ function App() {
     const nextSection = AnimateNextSection(
       event,
       mainRef.current,
-      [homeRef.current, workRef.current],
+      [homeRef.current, workRef.current, aboutRef.current],
       isAnimated,
       customSection
     );
@@ -73,6 +73,7 @@ function App() {
             <>
               <Home sectionRef={homeRef} />
               <Work sectionRef={workRef} OnVideoShown={ShowVideo} />
+              <Work sectionRef={aboutRef} OnVideoShown={ShowVideo} />
             </>
           )}
         </main>
