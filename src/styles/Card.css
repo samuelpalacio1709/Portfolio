@@ -154,3 +154,14 @@
     border-top-left-radius: var(--border-radius-third);
     pointer-events: no;
 }
+
+.swiper {
+    width: 92%;
+    height: auto;
+    align-items: center;
+    height: 600px;
+}
+
+.swiper-slide {
+    width: 100%;
+}

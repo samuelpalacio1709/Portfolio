@@ -1,7 +1,6 @@
 import './styles/App.css';
 import { Header } from './components/Header';
 import { Card } from './components/Card';
-import { info } from './information';
 import { VideoPlayer } from './components/VideoPlayer';
 import { Home } from './components/Home';
 import { Suspense, useEffect, useRef, useState } from 'react';
