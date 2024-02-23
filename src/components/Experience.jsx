@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '../styles/Experience.css';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { CameraShake } from '@react-three/drei';
@@ -7,6 +7,7 @@ import gsap from 'gsap';
 import { Model } from './Model';
 import { createOutlineMaterial } from '../materials';
 import { Stats } from '@react-three/drei';
+import { Tools } from './Tools';
 
 export function Experience({ section, OnSceneLoaded }) {
   const [pos, setPos] = useState(new THREE.Vector3(-50, -5, 1));
@@ -35,6 +36,19 @@ export function Experience({ section, OnSceneLoaded }) {
         z: 6,
         x: 2,
         y: -7,
+        onUpdate: () => setPos(vector),
+        onComplete: () => {
+          setMoving(false);
+        },
+        ease: 'sine.inOut'
+      });
+    }
+    if (section == 2) {
+      gsap.to(vector, {
+        duration: 0.8,
+        z: 4,
+        x: -2,
+        y: -4,
         onUpdate: () => setPos(vector),
         onComplete: () => {
           setMoving(false);
@@ -85,6 +99,7 @@ function Camera({ cameraPos }) {
 
 function Scene({ section, OnSceneLoaded, moving }) {
   const [mainModel, setMain] = useState(null);
+  const toolsModel = useRef(null);
   const [outline, setOutlineModel] = useState(null);
   const [animate, setAnimation] = useState(false);
   const { scene, camera, raycaster } = useThree();
@@ -136,6 +151,8 @@ function Scene({ section, OnSceneLoaded, moving }) {
       >
         <planeGeometry></planeGeometry>
       </mesh>
+
+      <Tools section={section}></Tools>
       <Model
         section={section}
         modelSet={setMainModel}

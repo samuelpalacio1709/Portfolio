@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { Card } from './components/Card';
 import { VideoPlayer } from './components/VideoPlayer';
 import { Home } from './components/Home';
+import { About } from './components/About';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { AnimateNextSection } from './utility';
 import { Experience } from './components/Experience';
@@ -72,7 +73,7 @@ function App() {
             <>
               <Home sectionRef={homeRef} />
               <Work sectionRef={workRef} OnVideoShown={ShowVideo} />
-              <Work sectionRef={aboutRef} OnVideoShown={ShowVideo} />
+              <About sectionRef={aboutRef} />
             </>
           )}
         </main>

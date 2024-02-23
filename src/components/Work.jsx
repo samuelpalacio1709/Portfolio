@@ -11,9 +11,6 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 
 export function Work({ sectionRef, OnVideoShown }) {
-  // init Swiper:
-  const customPrevButton = '<div class="my-swiper-button-prev">Prev</div>';
-  const customNextButton = '<div class="my-swiper-button-next">Next</div>';
   return (
     <section className="work section" ref={sectionRef}>
       <div className="showcase-work">

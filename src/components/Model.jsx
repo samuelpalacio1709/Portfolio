@@ -113,6 +113,9 @@ export function Model({
     } else if (section == 1) {
       offset = 6;
       offsetZ = 6;
+    } else if (section == 2) {
+      offset = 1;
+      offsetZ = 4;
     }
 
     head.userData.z = lerp(head.userData.z, offsetZ, delta * speedToRotate * 2);
@@ -240,6 +243,13 @@ function loadMaterials(model) {
   });
 }
 function setPhase(mixer, phase, beforePhase) {
+  console.log(phase);
+  if (phase > 1) {
+    phase = 1;
+  }
+  if (beforePhase > 1) {
+    beforePhase = 1;
+  }
   if (mixer) {
     if (phase == beforePhase) return;
     mixer._actions[phase]
