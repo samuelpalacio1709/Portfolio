@@ -18,6 +18,7 @@ function App() {
   const contactRef = useRef(null);
   const [sceneLoaded, setLoadScene] = useState(false);
   const [srcVideo, setVideo] = useState('');
+  const [isChangingSection, setChangingSection] = useState(false);
 
   function showWheel(event) {
     event.preventDefault();
@@ -36,6 +37,12 @@ function App() {
       customSection
     );
     setSection(nextSection);
+    setChangingSection(true);
+    let duration = 1800;
+
+    setTimeout(() => {
+      setChangingSection(false);
+    }, duration);
   }
 
   function OptionChanged(option) {
@@ -65,7 +72,11 @@ function App() {
       {!sceneLoaded && <Loading></Loading>}
 
       <>
-        <Header currentSection={section} OnOptionChanged={OptionChanged} />
+        <Header
+          currentSection={section}
+          OnOptionChanged={OptionChanged}
+          onChangingSection={isChangingSection}
+        />
         <VideoPlayer src={srcVideo} OnVideoShown={ShowVideo} />
         <main ref={mainRef}>
           <Experience section={section} OnSceneLoaded={SceneLoaded} />

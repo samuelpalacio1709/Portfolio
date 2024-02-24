@@ -12,7 +12,6 @@ import { Tools } from './Tools';
 export function Experience({ section, OnSceneLoaded }) {
   const [pos, setPos] = useState(new THREE.Vector3(-50, -5, 1));
   const [moving, setMoving] = useState(false);
-  const [pointer, setPointer] = useState(new THREE.Vector2(0, 0));
   useEffect(() => {
     let vector = pos;
     setMoving(true);
@@ -102,8 +101,9 @@ function Scene({ section, OnSceneLoaded, moving }) {
   const toolsModel = useRef(null);
   const [outline, setOutlineModel] = useState(null);
   const [animate, setAnimation] = useState(false);
-  const { scene, camera, raycaster } = useThree();
-  const [pointLookingAt, setPoint] = useState(new THREE.Vector3(-2, 2, 2));
+  const { scene, camera, raycaster, gl } = useThree();
+  const [pointLookingAt, setPoint] = useState(new THREE.Vector3(-4, 1, 2));
+  const mouseOnCanvas = useRef(false);
   function setMainModel(model) {
     setMain(model);
   }
@@ -118,21 +118,43 @@ function Scene({ section, OnSceneLoaded, moving }) {
     OnSceneLoaded();
   }
   useEffect(() => {
+    mouseOnCanvas.current = false;
+  }, [section]);
+  useEffect(() => {
+    gl.domElement.addEventListener('mouseenter', function () {
+      mouseOnCanvas.current = true;
+      console.log('Enter');
+    });
+
+    gl.domElement.addEventListener('mouseleave', function () {
+      console.log('Leave');
+      mouseOnCanvas.current = false;
+    });
+    document.addEventListener('mouseleave', (event) => {
+      setPoint(null);
+    });
     document.addEventListener('mousemove', (event) => {
-      const newMousePos = new THREE.Vector2(0, 0);
-      newMousePos.x = (event.clientX / window.innerWidth) * 2 - 1;
-      newMousePos.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(newMousePos, camera);
+      if (!mouseOnCanvas.current) {
+        const newMousePos = new THREE.Vector2(0, 0);
+        newMousePos.x = (event.clientX / window.innerWidth) * 2 - 1;
+        newMousePos.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(newMousePos, camera);
+        const intersects = raycaster.intersectObjects(scene.children);
+        if (intersects.length > 0) {
+          setPoint(new THREE.Vector3(intersects[0].point.x, intersects[0].point.y, 1));
+        }
+      }
+    });
+  }, []);
+  useFrame((state) => {
+    if (mouseOnCanvas.current) {
+      raycaster.setFromCamera(state.pointer, camera);
       const intersects = raycaster.intersectObjects(scene.children);
       if (intersects.length > 0) {
         setPoint(new THREE.Vector3(intersects[0].point.x, intersects[0].point.y, 1));
       }
-    });
-  }, []);
-
-  useEffect(() => {
-    setPoint(null);
-  }, [section]);
+    }
+  });
 
   return (
     <>

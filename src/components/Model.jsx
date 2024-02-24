@@ -63,6 +63,7 @@ export function Model({
           child.userData.x = 0;
           child.userData.y = 0;
           child.userData.z = 0;
+          child.userData.needsReseting = false;
           headRef.current = child;
         }
         if (child.name === 'Outline') {
@@ -85,6 +86,12 @@ export function Model({
             child.visible = false;
           }
         }
+      });
+      window.addEventListener('blur', function () {
+        headRef.current.userData.needsReseting = true;
+      });
+      document.addEventListener('mouseenter', function () {
+        headRef.current.userData.needsReseting = false;
       });
       set(gltf);
       modelSet(gltf);
@@ -120,26 +127,27 @@ export function Model({
 
     head.userData.z = lerp(head.userData.z, offsetZ, delta * speedToRotate * 2);
     spaceship.userData.z = lerp(spaceship.userData.z, offsetZ, delta * speedToRotate * 2);
-
-    if (pointLookingAt && !moving) {
+    if (headRef.current.userData.needsReseting) {
+      let headWorldPos = new THREE.Vector3(0, 0, 0);
+      headWorldPos = head.getWorldPosition(headWorldPos);
+      head.userData.x = headWorldPos.x;
+      head.userData.y = headWorldPos.y;
+      spaceship.userData.x = head.userData.x;
+    } else if (pointLookingAt != null) {
       head.userData.x = lerp(head.userData.x, pointLookingAt.x, delta * speedToRotate * 2.5);
       head.userData.y = lerp(head.userData.y, pointLookingAt.y, delta * speedToRotate * 2);
       spaceship.userData.x = lerp(spaceship.userData.x, pointLookingAt.x, delta * speedToRotate);
     } else {
       let headWorldPos = new THREE.Vector3(0, 0, 0);
-      let spaceshipWorldPos = new THREE.Vector3(0, 0, 0);
       headWorldPos = head.getWorldPosition(headWorldPos);
-      spaceshipWorldPos = spaceship.getWorldPosition(spaceshipWorldPos);
-
-      head.userData.x = lerp(head.userData.x, headWorldPos.x + offset, delta * speedToRotate);
-      head.userData.y = lerp(head.userData.y, headWorldPos.y, delta * speedToRotate);
+      head.userData.x = lerp(head.userData.x, headWorldPos.x, (delta * speedToRotate) / 2);
+      head.userData.y = lerp(head.userData.y, headWorldPos.y, (delta * speedToRotate) / 2);
       spaceship.userData.x = lerp(
         spaceship.userData.x,
-        spaceshipWorldPos.x + offset,
-        delta * speedToRotate
+        head.userData.x,
+        (delta * speedToRotate) / 2
       );
     }
-    //Head rotation
     const localVectorHead = new THREE.Vector3(0, 0, 0);
     head.localToWorld(localVectorHead);
     head.lookAt(new THREE.Vector3(head.userData.x, head.userData.y, head.userData.z));
@@ -161,7 +169,6 @@ export function Model({
 
   useEffect(() => {
     if (animate && mixer.current == null) {
-      console.log('s');
       if (model?.animations.length) {
         mixer.current = new THREE.AnimationMixer(model.scene);
         const mainClip = model?.animations[0];
@@ -221,7 +228,6 @@ function loadMaterials(model) {
         child.material = materialCrystal;
       }
       if (child.material.name == 'DomeM') {
-        console.log('Dome');
         child.material = createTransparentMaterial();
         child.renderOrder = 2;
       }
@@ -243,7 +249,6 @@ function loadMaterials(model) {
   });
 }
 function setPhase(mixer, phase, beforePhase) {
-  console.log(phase);
   if (phase > 1) {
     phase = 1;
   }

@@ -1,6 +1,6 @@
-export function Header({ currentSection, OnOptionChanged }) {
+export function Header({ currentSection, OnOptionChanged, onChangingSection }) {
   return (
-    <header className="header">
+    <header className="header" style={{ pointerEvents: onChangingSection ? 'none' : 'auto' }}>
       <div className="logo">
         <h3>
           <img src="assets/imgs/logo.png" alt="logo" />
