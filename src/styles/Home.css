@@ -1,29 +1,32 @@
-.home {}
-
-.intro {
-    width: 70%;
-    height: 100%;
-    min-width: 540px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    padding-left: 140px;
-    flex-direction: column;
+.home {
 }
 
+.intro {
+  width: 70%;
+  height: 100%;
+  min-width: 540px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding-left: 140px;
+  flex-direction: column;
+  z-index: 10;
+}
 
 .strong {
-    color: var(--green-color);
+  color: var(--green-color);
 }
 
 .intro p {
-    font-size: 22px;
-    color: var(--light-color);
-    line-height: 3;
-    letter-spacing: 1px;
-
+  font-size: 22px;
+  color: var(--light-color);
+  line-height: 3;
+  letter-spacing: 1px;
 }
 
 .intro strong {
-    color: var(--green-color);
+  color: var(--green-color);
+}
+.intro-dsc {
+  z-index: 10;
 }

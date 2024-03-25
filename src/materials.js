@@ -1,24 +1,19 @@
 import * as THREE from 'three';
 
-
 export function createOutlineMaterial() {
   var outline_shader = {
     uniforms: {
-      "linewidth": { type: "f", value: 0.01 },
+      linewidth: { type: 'f', value: 0.01 }
     },
     vertex_shader: [
-      "uniform float linewidth;",
-      "void main() {",
-      "vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );",
-      "vec4 displacement = vec4( normalize( normalMatrix * normal ) * linewidth, 0.0 ) + mvPosition;",
-      "gl_Position = projectionMatrix * displacement;",
-      "}"
-    ].join("\n"),
-    fragment_shader: [
-      "void main() {",
-      "gl_FragColor = vec4( 1, 1, 1, 1.0 );",
-      "}"
-    ].join("\n")
+      'uniform float linewidth;',
+      'void main() {',
+      'vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );',
+      'vec4 displacement = vec4( normalize( normalMatrix * normal ) * linewidth, 0.0 ) + mvPosition;',
+      'gl_Position = projectionMatrix * displacement;',
+      '}'
+    ].join('\n'),
+    fragment_shader: ['void main() {', 'gl_FragColor = vec4( 1, 1, 1, 1.0 );', '}'].join('\n')
   };
 
   var outline_material = new THREE.ShaderMaterial({
@@ -26,7 +21,7 @@ export function createOutlineMaterial() {
     vertexShader: outline_shader.vertex_shader,
     fragmentShader: outline_shader.fragment_shader,
     side: THREE.BackSide,
-    transparent: true,
+    transparent: true
   });
   return outline_material;
 }
@@ -34,21 +29,17 @@ export function createOutlineMaterial() {
 export function createOutlineMaterialFront() {
   var outline_shader = {
     uniforms: {
-      "linewidth": { type: "f", value: 0.01 },
+      linewidth: { type: 'f', value: 0.01 }
     },
     vertex_shader: [
-      "uniform float linewidth;",
-      "void main() {",
-      "vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );",
-      "vec4 displacement = vec4( normalize( normalMatrix * normal ) * linewidth, 0.0 ) + mvPosition;",
-      "gl_Position = projectionMatrix * displacement;",
-      "}"
-    ].join("\n"),
-    fragment_shader: [
-      "void main() {",
-      "gl_FragColor = vec4( 1, 1, 1, 1.0 );",
-      "}"
-    ].join("\n")
+      'uniform float linewidth;',
+      'void main() {',
+      'vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );',
+      'vec4 displacement = vec4( normalize( normalMatrix * normal ) * linewidth, 0.0 ) + mvPosition;',
+      'gl_Position = projectionMatrix * displacement;',
+      '}'
+    ].join('\n'),
+    fragment_shader: ['void main() {', 'gl_FragColor = vec4( 1, 1, 1, 1.0 );', '}'].join('\n')
   };
 
   var outline_material = new THREE.ShaderMaterial({
@@ -59,13 +50,12 @@ export function createOutlineMaterialFront() {
     transparent: true,
     alphaTest: 1
   });
-  console.log(outline_material)
+  console.log(outline_material);
   return outline_material;
 }
 
 export function createTransparentMaterial() {
   var transparentShader = {
-
     uniforms: {
       // Define your uniforms here, e.g., texture, time, etc.
       time: { value: 1.0 },

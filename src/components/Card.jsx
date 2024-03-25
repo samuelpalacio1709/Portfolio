@@ -16,14 +16,22 @@ export function Card({ project, OnVideoShown }) {
               <div
                 className="button-img"
                 onClick={() => {
-                  OnVideoShown(project.videoLink);
+                  if (project.videoLink) {
+                    OnVideoShown(project.videoLink);
+                  }
                 }}
               >
+                <div className="overlay-lines">
+                  <img src="assets/imgs/overlay_lines.png" alt="overlay lines" />
+                </div>
+
                 <img className="project-img align-center" src={project.img} alt={project.title} />
               </div>
-              <div className="expand-video">
-                <h5>Click to watch video</h5>
-              </div>
+              {project.videoLink && (
+                <div className="expand-video">
+                  <h5>Click to watch video</h5>
+                </div>
+              )}
             </div>
             <div className="project-links">
               {project.links.map((link, index) => {

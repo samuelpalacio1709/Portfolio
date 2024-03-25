@@ -7,7 +7,6 @@ import gsap from 'gsap';
 import { Model } from './Model';
 import { createOutlineMaterial } from '../materials';
 import { Stats } from '@react-three/drei';
-import { Tools } from './Tools';
 
 export function Experience({ section, OnSceneLoaded }) {
   const [pos, setPos] = useState(new THREE.Vector3(-50, -5, 1));
@@ -98,7 +97,6 @@ function Camera({ cameraPos }) {
 
 function Scene({ section, OnSceneLoaded, moving }) {
   const [mainModel, setMain] = useState(null);
-  const toolsModel = useRef(null);
   const [outline, setOutlineModel] = useState(null);
   const [animate, setAnimation] = useState(false);
   const { scene, camera, raycaster, gl } = useThree();
@@ -117,9 +115,7 @@ function Scene({ section, OnSceneLoaded, moving }) {
     setAnimation(true);
     OnSceneLoaded();
   }
-  useEffect(() => {
-    mouseOnCanvas.current = false;
-  }, [section]);
+
   useEffect(() => {
     gl.domElement.addEventListener('mouseenter', function () {
       mouseOnCanvas.current = true;
@@ -147,6 +143,7 @@ function Scene({ section, OnSceneLoaded, moving }) {
     });
   }, []);
   useFrame((state) => {
+    console.log(mouseOnCanvas.current);
     if (mouseOnCanvas.current) {
       raycaster.setFromCamera(state.pointer, camera);
       const intersects = raycaster.intersectObjects(scene.children);
@@ -174,7 +171,6 @@ function Scene({ section, OnSceneLoaded, moving }) {
         <planeGeometry></planeGeometry>
       </mesh>
 
-      <Tools section={section}></Tools>
       <Model
         section={section}
         modelSet={setMainModel}

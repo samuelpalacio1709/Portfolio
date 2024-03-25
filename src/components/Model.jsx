@@ -22,6 +22,7 @@ export function Model({
   const spaceShipCenterRef = useRef(null);
   const headRef = useRef(null);
   const outlineRef = useRef(null);
+  const tools = useRef(null);
 
   const speedToRotate = 2;
   useEffect(() => {
@@ -32,6 +33,11 @@ export function Model({
       gltf.scene.traverse((child) => {
         child.frustumCulled = false;
 
+        if (child.name == 'Tools') {
+          child.visible = false;
+          tools.current = child;
+        }
+
         if (child.name == 'Black_L' || child.name == 'Black_R') {
           const tl = gsap.timeline({ repeat: -1, yoyo: true });
 
@@ -41,7 +47,7 @@ export function Model({
             y: 0.4,
             z: child.scale.z + 0.2,
             ease: 'sine.in',
-            delay: 1.4
+            delay: 1.2
           });
         }
         if (child.name == 'White_L' || child.name == 'White_R') {
@@ -51,7 +57,7 @@ export function Model({
             duration: 0.2,
             y: 0.4,
             ease: 'sine.out',
-            delay: 1.4
+            delay: 1.2
           });
         }
         if (child.name === 'Center') {
@@ -165,6 +171,13 @@ export function Model({
       setPhase(mixer.current, section, currentSection);
       setSection(section);
     }
+    if (tools.current) {
+      if (section == 2) {
+        tools.current.visible = true;
+      } else {
+        tools.current.visible = false;
+      }
+    }
   }, [section, mixer]);
 
   useEffect(() => {
@@ -181,7 +194,7 @@ export function Model({
 }
 function SetAnimationClips(mainClip, mixer) {
   const action1Clip = AnimationUtils.subclip(mainClip, 'All Animations', 0, 75, 24);
-  const action2Clip = AnimationUtils.subclip(mainClip, 'All Animations', 75, 93, 24);
+  const action2Clip = AnimationUtils.subclip(mainClip, 'All Animations', 75, 130, 24);
 
   const action1 = mixer.current.clipAction(action1Clip);
   const action2 = mixer.current.clipAction(action2Clip);
