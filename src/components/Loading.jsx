@@ -3,7 +3,9 @@ import '../styles/App.css';
 export function Loading() {
   return (
     <div className="loading">
-      <h1>Loading</h1>
+      <div className="container">
+        <div className="fill"></div>
+      </div>
     </div>
   );
 }

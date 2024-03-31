@@ -16,6 +16,8 @@ function App() {
   const workRef = useRef(null);
   const aboutRef = useRef(null);
   const contactRef = useRef(null);
+  const timerRef = useRef(null);
+
   const [sceneLoaded, setLoadScene] = useState(false);
   const [srcVideo, setVideo] = useState('');
   const [isChangingSection, setChangingSection] = useState(false);
@@ -40,16 +42,21 @@ function App() {
     setChangingSection(true);
     let duration = 1800;
 
-    setTimeout(() => {
-      setChangingSection(false);
-    }, duration);
+    if (!timerRef.current) {
+      timerRef.current = setTimeout(() => {
+        setChangingSection(false);
+        timerRef.current = null;
+      }, duration);
+    }
   }
 
   function OptionChanged(option) {
     NextSection(null, true, option);
   }
   function SceneLoaded() {
-    setLoadScene(true);
+    setTimeout(() => {
+      setLoadScene(true);
+    }, 1000);
   }
   function ShowVideo(url) {
     setVideo(url);
@@ -62,8 +69,10 @@ function App() {
 
     const mainElement = mainRef.current;
     mainElement.addEventListener('wheel', showWheel, { passive: false });
+    mainElement.addEventListener('touchmove', showWheel, { passive: false });
     return () => {
       mainElement.removeEventListener('wheel', showWheel);
+      mainElement.removeEventListener('touchmove', showWheel);
     };
   }, []);
 

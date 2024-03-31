@@ -6,21 +6,28 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { Model } from './Model';
 import { createOutlineMaterial } from '../materials';
+import { Group } from 'three';
+import { cameraPositions } from '../cameraPositions';
 import { Stats } from '@react-three/drei';
 
-export function Experience({ section, OnSceneLoaded }) {
+export function Experience({ section, OnSceneLoaded, offset }) {
   const [pos, setPos] = useState(new THREE.Vector3(-50, -5, 1));
   const [moving, setMoving] = useState(false);
+  const canvasRef = useRef();
+
   useEffect(() => {
     let vector = pos;
     setMoving(true);
+    setAnimation(vector, section);
+  }, [section]);
 
+  const setAnimation = (vector, section) => {
     if (section == 0) {
       gsap.to(vector, {
         duration: 1.5,
-        x: -2.4,
-        y: 0.8,
-        z: 3.7,
+        x: cameraPositions.home.x,
+        y: cameraPositions.home.y,
+        z: cameraPositions.home.z,
         onUpdate: () => setPos(vector),
         onComplete: () => {
           setMoving(false);
@@ -31,9 +38,9 @@ export function Experience({ section, OnSceneLoaded }) {
     if (section == 1) {
       gsap.to(vector, {
         duration: 0.8,
-        z: 6,
-        x: 2,
-        y: -7,
+        x: cameraPositions.work.x,
+        y: cameraPositions.work.y,
+        z: cameraPositions.work.z,
         onUpdate: () => setPos(vector),
         onComplete: () => {
           setMoving(false);
@@ -44,9 +51,9 @@ export function Experience({ section, OnSceneLoaded }) {
     if (section == 2) {
       gsap.to(vector, {
         duration: 0.8,
-        z: 4,
-        x: -2,
-        y: -4,
+        x: cameraPositions.about.x,
+        y: cameraPositions.about.y,
+        z: cameraPositions.about.z,
         onUpdate: () => setPos(vector),
         onComplete: () => {
           setMoving(false);
@@ -54,21 +61,30 @@ export function Experience({ section, OnSceneLoaded }) {
         ease: 'sine.inOut'
       });
     }
-  }, [section]);
+  };
 
   return (
     <section className="experience">
-      <Canvas>
+      <Canvas ref={canvasRef}>
+        <AdaptivePixelRatio></AdaptivePixelRatio>
         <ambientLight intensity={1} />
-        <pointLight intensity={2} position={[2, 2, 0]}></pointLight>
-        <directionalLight castShadow position={[0, 2, 0]}></directionalLight>
+        <pointLight intensity={2} position={[2, 2, 0]} />
+        <directionalLight castShadow position={[0, 2, 0]} />
         <Scene section={section} OnSceneLoaded={OnSceneLoaded} moving={moving} />
         <Camera cameraPos={pos} />
-
         <Stats />
       </Canvas>
     </section>
   );
+}
+
+function AdaptivePixelRatio() {
+  const current = useThree((state) => state.performance.current);
+  const setPixelRatio = useThree((state) => state.setDpr);
+  useEffect(() => {
+    setPixelRatio(window.devicePixelRatio * current);
+  }, [current]);
+  return null;
 }
 
 function Camera({ cameraPos }) {
@@ -119,11 +135,9 @@ function Scene({ section, OnSceneLoaded, moving }) {
   useEffect(() => {
     gl.domElement.addEventListener('mouseenter', function () {
       mouseOnCanvas.current = true;
-      console.log('Enter');
     });
 
     gl.domElement.addEventListener('mouseleave', function () {
-      console.log('Leave');
       mouseOnCanvas.current = false;
     });
     document.addEventListener('mouseleave', (event) => {
@@ -143,7 +157,6 @@ function Scene({ section, OnSceneLoaded, moving }) {
     });
   }, []);
   useFrame((state) => {
-    console.log(mouseOnCanvas.current);
     if (mouseOnCanvas.current) {
       raycaster.setFromCamera(state.pointer, camera);
       const intersects = raycaster.intersectObjects(scene.children);
