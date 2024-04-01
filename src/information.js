@@ -62,7 +62,12 @@ export const projectsInfo = [
     tools: ['React Three Fiber', 'Three.js', 'gsap'],
     description: 'You are currently exploring my personal portfolio! Thank you.',
     img: 'assets/imgs/portfolio_poster.png',
-    links: []
+    links: [
+      {
+        name: 'Code',
+        href: 'https://github.com/samuelpalacio1709/Portfolio'
+      }
+    ]
   },
   {
     title: '3D MODELING',
