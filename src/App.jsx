@@ -69,10 +69,10 @@ function App() {
 
     const mainElement = mainRef.current;
     mainElement.addEventListener('wheel', showWheel, { passive: false });
-    mainElement.addEventListener('touchmove', showWheel, { passive: false });
+    // mainElement.addEventListener('touchmove', showWheel, { passive: false });
     return () => {
       mainElement.removeEventListener('wheel', showWheel);
-      mainElement.removeEventListener('touchmove', showWheel);
+      // mainElement.removeEventListener('touchmove', showWheel);
     };
   }, []);
 

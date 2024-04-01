@@ -262,11 +262,29 @@ iframe {
   .options {
     right: 20px;
   }
+  .video-container {
+    width: 700px;
+    height: 440px;
+  }
+
+  iframe {
+    width: 650px;
+    height: 400px;
+  }
 }
 
 @media only screen and (max-width: 750px) {
   .bar-menu {
     display: flex;
+  }
+
+  .intro-dsc {
+    margin-top: 20px;
+    width: 80%;
+  }
+  p {
+    line-height: 50px !important;
+    margin-left: 5px;
   }
 
   .options {
@@ -286,6 +304,13 @@ iframe {
     opacity: 0;
   }
 
-  .option-selected {
+  .video-container {
+    width: 90vw;
+    height: 300px;
+  }
+
+  iframe {
+    width: 84vw;
+    height: 260px;
   }
 }

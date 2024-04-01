@@ -9,17 +9,32 @@ import { createOutlineMaterial } from '../materials';
 import { Group } from 'three';
 import { cameraPositions } from '../cameraPositions';
 import { Stats } from '@react-three/drei';
+import _ from 'lodash';
 
 export function Experience({ section, OnSceneLoaded, offset }) {
   const [pos, setPos] = useState(new THREE.Vector3(-50, -5, 1));
   const [moving, setMoving] = useState(false);
   const canvasRef = useRef();
-
+  const sectionRef = useRef(0);
   useEffect(() => {
+    sectionRef.current = section;
     let vector = pos;
     setMoving(true);
     setAnimation(vector, section);
   }, [section]);
+
+  useEffect(() => {
+    const handleResize = _.debounce(() => {
+      let vector = pos;
+      setAnimation(vector, sectionRef.current);
+    }, 250);
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const setAnimation = (vector, section) => {
     if (section == 0) {
@@ -72,7 +87,7 @@ export function Experience({ section, OnSceneLoaded, offset }) {
         <directionalLight castShadow position={[0, 2, 0]} />
         <Scene section={section} OnSceneLoaded={OnSceneLoaded} moving={moving} />
         <Camera cameraPos={pos} />
-        <Stats />
+        {/* <Stats /> */}
       </Canvas>
     </section>
   );

@@ -1,52 +1,54 @@
 .work {
-    display: flex;
-    padding-top: 100px;
+  display: flex;
+  padding-top: 100px;
 }
 
 .showcase-work {
-    width: 97vw;
-    height: 88vh;
-    display: flex;
-    align-items: center;
-    margin: 0 auto;
-    padding-top: 7vh;
-
+  width: 97vw;
+  height: 88vh;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  padding-top: 7vh;
 }
 
 .control {
-    width: 5%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+  width: 5%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-
 .control-project {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    border-radius: 100px;
-    background-color: var(--green-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    min-width: 60px;
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+  background-color: var(--green-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-width: 60px;
 }
 
 .control-project img {
-    width: 27px;
-    height: 31px;
-    align-items: center;
-    justify-content: center;
+  width: 27px;
+  height: 31px;
+  align-items: center;
+  justify-content: center;
 }
 
 .rigth-arrow {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .left-arrow {
-    margin-right: 5px;
+  margin-right: 5px;
+}
+@media only screen and (max-width: 750px) {
+  .showcase-work {
+    width: 85vw;
+  }
 }

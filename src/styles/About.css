@@ -7,7 +7,6 @@
   padding-right: 14%;
   padding-left: 5%;
   padding-top: 40px;
-  z-index: 10;
 }
 
 .about p {
@@ -27,4 +26,21 @@
 .strong {
   color: var(--green-color);
   font-weight: 700;
+}
+
+@media only screen and (max-width: 1000px) {
+  .about {
+    width: 70%;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .about {
+    width: 100%;
+  }
+
+  .about p {
+    background-color: rgb(1, 1, 1, 0.8);
+    padding-left: 20px;
+  }
 }

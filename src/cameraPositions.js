@@ -12,31 +12,49 @@ export let cameraPositions = {
   },
 
   about: {
-    x: -2,
+    x: -3,
     y: -4,
-    z: 5
+    z: 3
   }
 };
 const setPositions = () => {
-  if (window.innerWidth <= 1000) {
+  //Camera positions for desktop
+  if (window.innerWidth > 1023) {
+    cameraPositions.home = {
+      x: -2.4,
+      y: 0.8,
+      z: 3.7
+    };
+    cameraPositions.work = {
+      x: 2,
+      y: -7,
+      z: 6
+    };
+  }
+  //Camera positions for tablets
+  if (window.innerWidth <= 1023 && window.innerWidth > 750) {
     cameraPositions.home = {
       x: 0.3,
       y: 2,
       z: 4
     };
+    cameraPositions.work = {
+      x: 0,
+      y: -7,
+      z: 6
+    };
   }
-
-  if (window.innerWidth <= 650) {
+  //Camera positions for cellphones
+  if (window.innerWidth <= 750) {
     cameraPositions.home = {
       x: 0,
-      y: 1,
+      y: 1.5,
       z: 5
     };
-
     cameraPositions.work = {
       x: -1,
-      y: -7.5,
-      z: 8
+      y: -7,
+      z: 6
     };
   }
 };

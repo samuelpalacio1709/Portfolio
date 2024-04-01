@@ -27,7 +27,7 @@ export const projectsInfo = [
       },
       { name: 'Code', href: 'https://github.com/samuelpalacio1709/2D-Figure-Editor' }
     ],
-    videoLink: 'https://www.youtube.com/embed/hffULUaBp5Y'
+    videoLink: 'https://www.youtube.com/embed/rbgvz-G6DH0?si=3CSMxt8VXYsuA2up'
   },
   {
     title: 'Parkour Race',
@@ -38,7 +38,7 @@ export const projectsInfo = [
     links: [
       {
         name: 'Web',
-        href: 'https://figureeditor.vercel.app/'
+        href: 'https://parkour.samuelpalacio.me/'
       },
       { name: 'Code', href: 'https://github.com/samuelpalacio1709/multiplayer-parkour-three.js' }
     ],

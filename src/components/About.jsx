@@ -4,7 +4,7 @@ export function About({ sectionRef }) {
   return (
     <section className=" section" ref={sectionRef}>
       <div className="about">
-        <div className="about-me" style={{ zIndex: 10 }}>
+        <div className="about-me" style={{ zIndex: 7 }}>
           <h2>About me</h2>
           <br />
           <p>
@@ -15,7 +15,7 @@ export function About({ sectionRef }) {
           </p>
         </div>
         <br /> <br />
-        <div className="skills" style={{ zIndex: 10 }}>
+        <div className="skills" style={{ zIndex: 7 }}>
           <h2>Skills</h2>
           <br />
           <p>Game Development</p>

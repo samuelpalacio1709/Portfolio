@@ -36,7 +36,7 @@ export function AnimateNextSection(event, main, sections, isAnimated = true, cus
 
   if (isAnimated && event !== null) {
     console.log(event);
-    if (event.deltaY > 0 || !event.delay) {
+    if (event.deltaY > 0) {
       currentSectionIndex++;
       if (currentSectionIndex >= sections.length) {
         currentSectionIndex = sections.length - 1;
