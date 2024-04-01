@@ -228,7 +228,7 @@ iframe {
   position: absolute;
   top: 0;
   left: 0;
-  background-image: url('assets/imgs/logo.png');
+  background-image: url('./imgs/logo.png');
   background-size: 100% auto; /* Maintain aspect ratio, cover width */
   background-position: top;
   animation: fillAnimation 1.4s linear infinite;
