@@ -21,7 +21,32 @@ function App() {
   const [sceneLoaded, setLoadScene] = useState(false);
   const [srcVideo, setVideo] = useState('');
   const [isChangingSection, setChangingSection] = useState(false);
+  const [touchDown, setTouchDown] = useState(false);
+  const lastY = useRef(null);
 
+  const handleTouchStart = (event) => {
+    const touch = event.changedTouches[0];
+    const clientY = touch.clientY;
+    console.log('clientY at touch end:', clientY);
+    lastY.current = clientY;
+  };
+
+  const handleTouchEnd = (event) => {
+    // const touch = event.changedTouches[0];
+    // const clientY = touch.clientY;
+    // console.log('clientY at touch end:', clientY);
+    // lastY.current = clientY;
+  };
+
+  const handleTouchMove = (event) => {
+    console.log('move');
+
+    const currentY = event.touches[0].clientY;
+    const deltaY = currentY - lastY.current;
+    const e = { deltaY: -deltaY, preventDefault: () => {} };
+    showWheel(e);
+    console.log(lastY.current);
+  };
   function showWheel(event) {
     event.preventDefault();
     NextSection(event, true);
@@ -69,10 +94,14 @@ function App() {
 
     const mainElement = mainRef.current;
     mainElement.addEventListener('wheel', showWheel, { passive: false });
-    // mainElement.addEventListener('touchmove', showWheel, { passive: false });
+    mainElement.addEventListener('touchend', handleTouchEnd);
+    mainElement.addEventListener('touchstart', handleTouchStart);
+    mainElement.addEventListener('touchmove', handleTouchMove);
     return () => {
       mainElement.removeEventListener('wheel', showWheel);
-      // mainElement.removeEventListener('touchmove', showWheel);
+      mainElement.removeEventListener('touchstart', handleTouchStart);
+      mainElement.removeEventListener('touchend', handleTouchEnd);
+      mainElement.removeEventListener('touchmove', handleTouchMove);
     };
   }, []);
 
@@ -88,6 +117,7 @@ function App() {
         />
         <VideoPlayer src={srcVideo} OnVideoShown={ShowVideo} />
         <main ref={mainRef}>
+          <MouseScroll section={section}></MouseScroll>
           <Experience section={section} OnSceneLoaded={SceneLoaded} />
           {sceneLoaded && (
             <>
@@ -103,3 +133,21 @@ function App() {
 }
 
 export default App;
+
+function MouseScroll({ section }) {
+  function checkDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+  }
+
+  // Rendering the <div> only if show is true and checkDevice returns true
+  if (section == 0 && !checkDevice()) {
+    return (
+      <div className="field">
+        <div className="mouse"></div>
+      </div>
+    );
+  }
+
+  // If show is false or checkDevice returns false, return null
+  return null;
+}
