@@ -140,7 +140,7 @@ function MouseScroll({ section }) {
   }
 
   // Rendering the <div> only if show is true and checkDevice returns true
-  if (section == 0 && !checkDevice()) {
+  if (section == 0) {
     return (
       <div className="field">
         <div className="mouse"></div>
