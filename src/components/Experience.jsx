@@ -77,17 +77,16 @@ export function Experience({ section, OnSceneLoaded, offset }) {
       });
     }
   };
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   return (
     <section className="experience">
-      <Canvas ref={canvasRef}>
-        <AdaptivePixelRatio></AdaptivePixelRatio>
+      <Canvas ref={canvasRef} gl={{ antialias: !isMobile }}>
         <ambientLight intensity={1} />
         <pointLight intensity={2} position={[2, 2, 0]} />
         <directionalLight castShadow position={[0, 2, 0]} />
         <Scene section={section} OnSceneLoaded={OnSceneLoaded} moving={moving} />
         <Camera cameraPos={pos} />
-        {/* <Stats /> */}
       </Canvas>
     </section>
   );
